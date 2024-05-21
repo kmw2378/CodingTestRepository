@@ -1,29 +1,45 @@
 import java.util.*;
 
-class Main {
+public class Main {
+    static Queue<Integer> queue = new LinkedList<>();;
+    static int a;
+    static int b;
+    static int count = 1;
+    
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int a = sc.nextInt();
-        int b = sc.nextInt();
-        int count = 1;
-        while (a < b) {
-            String str = String.valueOf(b);
+        a = sc.nextInt();
+        b = sc.nextInt();
+        
+        bfs();
+        System.out.println(count);
+    }
+    
+    private static void bfs() {
+        queue.add(b);
+        
+        while (!queue.isEmpty()) {
+            int poll = queue.poll();
+            String str = String.valueOf(poll);
             
-            if (b % 2 == 0) {
-                b /= 2;
-            } else if (str.charAt(str.length() - 1) == '1') {
-                b = Integer.parseInt(str.substring(0, str.length() - 1));
-            } else {
+            if (poll == a) {
+                return;
+            } else if (poll < a) {
                 count = -1;
-                break;
+                return;
             }
             
+            if (poll % 2 == 0) {
+                poll /= 2;
+            } else if (str.charAt(str.length() - 1) == '1') {
+                poll = Integer.parseInt(str.substring(0, str.length() - 1));
+            } else {
+                count = -1;
+                return;
+            }
+            
+            queue.add(poll);
             count++;
         }
-        
-        if (b < a) {
-            count = -1;
-        }
-        System.out.println(count);
     }
 }
