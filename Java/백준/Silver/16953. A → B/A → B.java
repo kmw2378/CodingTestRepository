@@ -6,7 +6,7 @@ class Main {
         int a = sc.nextInt();
         int b = sc.nextInt();
         int count = 1;
-        while (a != b) {
+        while (a < b) {
             String str = String.valueOf(b);
             
             if (b % 2 == 0) {
@@ -18,14 +18,12 @@ class Main {
                 break;
             }
             
-            if (b < a) {
-                count = -1;
-                break;
-            }
-            
             count++;
         }
         
+        if (b < a) {
+            count = -1;
+        }
         System.out.println(count);
     }
 }
