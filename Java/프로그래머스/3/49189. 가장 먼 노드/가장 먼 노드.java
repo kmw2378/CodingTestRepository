@@ -43,7 +43,7 @@ class Solution {
         while (!queue.isEmpty()) {
             int current = queue.poll();
             for (int x : map.get(current)) {
-                if (costs[x] == -1 || costs[x] > costs[current] + 1) {
+                if (costs[x] == -1) {
                     costs[x] = costs[current] + 1;
                     queue.add(x);
                 }
