@@ -29,10 +29,6 @@ class Solution {
                 min = Math.abs(sum);
                 result[0] = arr[left];
                 result[1] = arr[right];
-                
-                if (sum == 0) {
-                    break;
-                }
             }
             
             if (sum < 0) {
