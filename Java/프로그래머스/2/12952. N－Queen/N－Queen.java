@@ -1,8 +1,6 @@
 import java.util.*;
 
 class Solution {
-    int[] dx = {-1, -1, 1, 1};
-    int[] dy = {-1, 1, -1, 1};
     int answer = 0;
     
     public int solution(int n) {
