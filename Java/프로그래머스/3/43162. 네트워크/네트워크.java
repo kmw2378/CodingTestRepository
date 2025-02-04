@@ -1,29 +1,27 @@
 import java.util.*;
 
 class Solution {
-    boolean[] visited;
-    Map<Integer, List<Integer>> map;
-    
     public int solution(int n, int[][] computers) {
-        int answer = 0;
-        visited = new boolean[n];
-        map = new HashMap<>();
+        Map<Integer, List<Integer>> graph = new HashMap<>();
         for (int i = 0; i < n; i++) {
-            map.put(i, new ArrayList<>());
+            graph.put(i, new ArrayList<>());
         }
         
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n && j != i; j++) {
-                if (computers[i][j] == 1) {
-                    map.get(i).add(j);
-                    map.get(j).add(i);
+            for (int j = 0; j < n; j++) {
+                if (i == j || computers[i][j] == 0) {
+                    continue;
                 }
+                
+                graph.get(i).add(j);
             }
         }
         
+        int answer = 0;
+        boolean[] visited = new boolean[n];
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
-                dfs(i);
+                dfs(i, visited, graph);
                 answer++;
             }
         }
@@ -31,11 +29,11 @@ class Solution {
         return answer;
     }
     
-    private void dfs(int p) {
-        visited[p] = true;
-        for (int x : map.get(p)) {
-            if (!visited[x]) {
-                dfs(x);
+    private void dfs(int current, boolean[] visited, Map<Integer, List<Integer>> graph) {
+        visited[current] = true;
+        for (int next : graph.get(current)) {
+            if (!visited[next]) {
+                dfs(next, visited, graph);
             }
         }
     }
