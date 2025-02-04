@@ -1,39 +1,49 @@
 class Solution {
-    boolean[] visited;
     int answer = Integer.MAX_VALUE;
+    
     public int solution(String begin, String target, String[] words) {
-        visited = new boolean[words.length];
-        dfs(begin, target, words, 0);
-        return answer == Integer.MAX_VALUE ? 0 : answer;
+        backtracking(begin, 0, words, target, new boolean[words.length]);
+        if (answer == Integer.MAX_VALUE) {
+            return 0;
+        }
+        return answer;
     }
     
-    private void dfs(String current, String target, String[] words, int cnt) {
-        if (current.equals(target)) {
-            answer = Math.min(answer, cnt);
+    private void backtracking(String currentWord, int cnt, String[] words, String target, boolean[] visited) {
+        if (currentWord.equals(target)) {
+            answer = Math.min(cnt, answer);
             return;
         }
         
         for (int i = 0; i < words.length; i++) {
-            if (!visited[i] && isDifferentOneChar(current, words[i])) {
-                visited[i] = true;
-                dfs(words[i], target, words, cnt + 1);
-                visited[i] = false;
+            String nextWord = words[i];
+            if (visited[i] || !canChange(currentWord, nextWord)) {
+                continue;
             }
+            
+            visited[i] = true;
+            backtracking(nextWord, cnt + 1, words, target, visited);
+            visited[i] = false;
         }
     }
     
-    private boolean isDifferentOneChar(String s1, String s2) {
-        if (s1.length() != s2.length()) {
+    private boolean canChange(String a, String b) {
+        if (a.length() != b.length()) {
             return false;
         }
         
-        int cnt = 0;
-        for (int i = 0; i < s1.length(); i++) {
-            if (s1.charAt(i) != s2.charAt(i)) {
-                cnt++;
+        int length = a.length();
+        int differentCnt = 0;
+        for (int i = 0; i < length; i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                differentCnt++;
+            }
+            
+            if (differentCnt > 1) {
+                return false;
             }
         }
         
-        return cnt == 1;
+        return differentCnt == 1;
     }
 }
