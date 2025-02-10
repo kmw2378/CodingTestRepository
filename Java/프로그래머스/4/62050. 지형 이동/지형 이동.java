@@ -7,49 +7,57 @@ class Solution {
     public int solution(int[][] land, int height) {
         int n = land.length;
         boolean[][] visited = new boolean[n][n];
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(edge -> edge.cost));
+        Queue<Edge> queue = new PriorityQueue<>();
         int[][] costs = new int[n][n];
-        for (int[] row : costs) Arrays.fill(row, Integer.MAX_VALUE);
+        for (int[] row : costs) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
 
-        pq.add(new Edge(0, 0, 0));
+        queue.add(new Edge(0, 0, 0));
         costs[0][0] = 0;
 
         int totalCost = 0;
 
-        while (!pq.isEmpty()) {
-            Edge current = pq.poll();
-
-            if (visited[current.x][current.y]) continue;
+        while (!queue.isEmpty()) {
+            Edge current = queue.poll();
+            if (visited[current.x][current.y]) {
+                continue;
+            }
             visited[current.x][current.y] = true;
-            totalCost += current.cost;
+            totalCost += current.cost;  // current는 무조건 방문하는 간선이므로 totalCost에 비용 반영
 
             for (int i = 0; i < 4; i++) {
                 int nx = current.x + dx[i];
                 int ny = current.y + dy[i];
-
-                if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
-                if (visited[nx][ny]) continue;
-
+                if (nx < 0 || ny < 0 || nx >= n || ny >= n || visited[nx][ny]) {
+                    continue;
+                }
+                
                 int heightDiff = Math.abs(land[current.x][current.y] - land[nx][ny]);
                 int nextCost = (heightDiff > height) ? heightDiff : 0;
-
                 if (costs[nx][ny] > nextCost) {
                     costs[nx][ny] = nextCost;
-                    pq.add(new Edge(nx, ny, nextCost));
+                    queue.add(new Edge(nx, ny, nextCost));
                 }
             }
         }
 
         return totalCost;
     }
+}
+class Edge implements Comparable<Edge> {
+    int x;  // 목적지 x좌표
+    int y;  // 목적지 y좌표
+    int cost;
 
-    static class Edge {
-        int x, y, cost;
-
-        Edge(int x, int y, int cost) {
-            this.x = x;
-            this.y = y;
-            this.cost = cost;
-        }
+    Edge(int x, int y, int cost) {
+        this.x = x;
+        this.y = y;
+        this.cost = cost;
+    }
+    
+    @Override
+    public int compareTo(Edge other) {
+        return Integer.compare(cost, other.cost);
     }
 }
